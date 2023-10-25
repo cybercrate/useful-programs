@@ -1,8 +1,10 @@
 plugins {
     id 'java'
     id 'application'
-    id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
+
+group = 'com.wingmann'
+version = '1.0.0'
 
 java {
     toolchain {
@@ -22,14 +24,15 @@ dependencies {
     implementation 'com.google.guava:guava:32.1.1-jre'
 }
 
-shadowJar {
-    archiveBaseName.set('date')
-    archiveVersion.set('1.0.0')
-    archiveClassifier.set('')
-
+jar {
     manifest {
         attributes 'Main-Class': application.mainClass
     }
-}
 
-tasks.build.dependsOn tasks.shadowJar
+    def dependencies = configurations
+            .runtimeClasspath
+            .collect { zipTree(it) }
+
+    from(dependencies)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
