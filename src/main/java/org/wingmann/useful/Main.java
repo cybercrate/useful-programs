@@ -1,21 +1,21 @@
-package org.wingmann.useful.multithreading;
+package org.wingmann.useful;
 
 import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        var queue = new BlockingQueue();
+        BlockingQueue queue = new BlockingQueue();
 
-        var worker = new Thread(() -> {
+        Thread worker = new Thread(() -> {
             while (true) {
-                var task = queue.get();
+                Runnable task = queue.get();
                 task.run();
             }
         });
 
         worker.start();
 
-        for (var i = 0; i < 5; ++i) {
+        for (int i = 0; i < 5; ++i) {
             queue.put(getTask());
         }
     }
@@ -27,7 +27,7 @@ public class Main {
                 System.out.printf("Task started (%s)%n", this);
 
                 try {
-                    for (var i = 1; i <= 5; ++i) {
+                    for (int i = 1; i <= 5; ++i) {
                         System.out.printf("%d ", i);
                         Thread.sleep(500);
                     }
@@ -51,7 +51,7 @@ public class Main {
                 }
             }
 
-            var task = tasks.get(0);
+            Runnable task = tasks.get(0);
             tasks.remove(task);
 
             return task;
